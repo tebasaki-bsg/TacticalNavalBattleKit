@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2036
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{1fc59ec6-104d-4608-943d-c8c93effdf57}") = "TNBK_assem", "TNBK_assem\TNBK_assem.csproj", "{924fba76-535a-4458-afbd-80c53a4defc1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{924fba76-535a-4458-afbd-80c53a4defc1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{924fba76-535a-4458-afbd-80c53a4defc1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{924fba76-535a-4458-afbd-80c53a4defc1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{924fba76-535a-4458-afbd-80c53a4defc1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8679117c-799e-4250-bf0c-2d5541bf8c98}
+	EndGlobalSection
+EndGlobal
