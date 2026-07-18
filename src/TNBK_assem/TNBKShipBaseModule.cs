@@ -100,7 +100,10 @@ namespace TNBKSpace
                 Transform ProjectilePoolTrans = GameObject.Find("PROJECTILES").transform.Find("Projectile Pool");
                 foreach (Transform child in ProjectilePoolTrans)
                 {
-                    child.gameObject.AddComponent<TNBKCannonProjectileScript>();
+                    if(child.gameObject.GetComponent<TNBKCannonProjectileScript>() == null)
+                    {
+                        child.gameObject.AddComponent<TNBKCannonProjectileScript>();
+                    }
                 }
 
                 Mod.CannonScriptAttached = true;
@@ -152,6 +155,8 @@ namespace TNBKSpace
 
             TNBKMapSession.OnSessionEnd();
             Mod.CannonScriptAttached = false;
+            Mod.ShipBaseList.Clear();
+
         }
     }
 }

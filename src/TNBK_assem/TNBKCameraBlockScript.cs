@@ -21,8 +21,6 @@ namespace TNBKSpace
         private FixedCameraBlock fixedCam;
         private BlockBehaviour blockBehaviour;
 
-        private int fixedFramesInSim = 0;
-
         private TNBKShipBaseModuleBehaviour carrierShip;
         private bool carrierSearched;
 
