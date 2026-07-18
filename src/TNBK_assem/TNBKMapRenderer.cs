@@ -22,10 +22,10 @@ namespace TNBKSpace
         public static bool MapVisible = false;
 
         /// <summary>表示倍率(1 = 960x960px)</summary>
-        public static float MapScale = 1f;
+        public static float MapScale = 0.4f;
 
         /// <summary>画面中心からのオフセット(px)。(0,0)で画面中央</summary>
-        public static Vector2 MapPosition = Vector2.zero;
+        public static Vector2 MapPosition = new Vector2(-700f, 300f);
 
         // ---- マップ定義 ----
         private const float WorldSizeMeters = 3840f;   // ワールドの一辺
@@ -56,6 +56,20 @@ namespace TNBKSpace
         // ---- テクスチャ(初回描画時に遅延ロード) ----
         private Texture2D texBackground, texDD, texCC, texDirection;
         private bool texturesLoaded;
+
+        //シミュ中にF5キーを押したらマップを表示
+        public void Update()
+        {
+            if(StatMaster.PlayMode == BesiegePlayMode.BuildMode)
+            {
+                return;
+            }
+
+            if(Input.GetKeyDown(KeyCode.F5))
+            {
+                MapVisible = !MapVisible;
+            }
+        }
 
         private void EnsureTextures()
         {

@@ -12,7 +12,6 @@ namespace TNBKSpace
     public class TNBKStartingBlockScript : BlockScript
     {
         public BlockBehaviour blockbehaviour;
-        public MKey MapActivateKey;
 
         public MSlider ScaleSlider;
         public MSlider OffsetSliderX;
@@ -23,9 +22,6 @@ namespace TNBKSpace
         public void Awake()
         {
             blockbehaviour = GetComponent<BlockBehaviour>();
-
-            MapActivateKey = blockbehaviour.AddKey(Mod.isJapanese ? "マップ表示切り替え" : "Change Map Status", "change-map-status", KeyCode.P);
-            MapActivateKey.DisplayInMapper = true;
 
             //ScaleとOffsetのスライダーを追加
             ScaleSlider = blockbehaviour.AddSlider("Scale X", "map-scale", 0.4f, 0.01f, 5f);
@@ -63,11 +59,6 @@ namespace TNBKSpace
             if(!isOwnerSame)
             {
                 return;
-            }
-
-            if(MapActivateKey.IsPressed || MapActivateKey.EmulationPressed())
-            {
-                TNBKMapRenderer.MapVisible = !TNBKMapRenderer.MapVisible;
             }
         }
 

@@ -117,6 +117,7 @@ Add some utilities for naval battle.  <!-- FIX: Insert a short description here.
 	<!-- Access these keys using the ModKeys class. -->
 	<Keys>
 		<!--<Key name="Sample Key" defaultModifier="LeftControl" defaultTrigger="U" />-->
+		<Key name="Show Minimap" defaultModifier="None" defaultTrigger="F5" />
 	</Keys>
 	
 	<!-- The mod loader will automatically make all resources listed here available
