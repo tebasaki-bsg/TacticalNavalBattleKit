@@ -105,6 +105,50 @@ Add some utilities for naval battle.  <!-- FIX: Insert a short description here.
 	<!-- Any logic trigger types your mod adds to the game. -->
 	<!-- See the ModTriggers class for info on how to activate your triggers. -->
 	<Triggers>
+		<Trigger>
+			<Name>None Team Destroyed</Name>
+			<ID>0</ID>
+			<AvailableOn>
+				<AllOfficialEntities />
+				<AllModdedEntities />
+			</AvailableOn>
+		</Trigger>
+
+		<Trigger>
+			<Name>Red Team Destroyed</Name>
+			<ID>1</ID>
+			<AvailableOn>
+				<AllOfficialEntities />
+				<AllModdedEntities />
+			</AvailableOn>
+		</Trigger>
+
+		<Trigger>
+			<Name>Grean Team Destroyed</Name>
+			<ID>2</ID>
+			<AvailableOn>
+				<AllOfficialEntities />
+				<AllModdedEntities />
+			</AvailableOn>
+		</Trigger>
+
+		<Trigger>
+			<Name>Orange Team Destroyed</Name>
+			<ID>3</ID>
+			<AvailableOn>
+				<AllOfficialEntities />
+				<AllModdedEntities />
+			</AvailableOn>
+		</Trigger>
+
+		<Trigger>
+			<Name>Blue Team Destroyed</Name>
+			<ID>4</ID>
+			<AvailableOn>
+				<AllOfficialEntities />
+				<AllModdedEntities />
+			</AvailableOn>
+		</Trigger>
 		
 	</Triggers>
 	

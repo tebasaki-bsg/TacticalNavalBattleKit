@@ -21,12 +21,18 @@ namespace TNBKSpace
         [XmlElement("ShipClass")]
         [DefaultValue(60f)]
         public int ShipClass = 0;
+
+        [XmlElement("ProgressSlider")]
+        [RequireToValidate]
+        public MSliderReference ProgressSlider;
     }
 
     public class TNBKShipBaseModuleBehaviour : BlockModuleBehaviour<TNBKShipBaseModule>
     {
-        public BasicInfo basicinfo;
+        public MSlider progressSlider;
+        public int Progress;
 
+        public BasicInfo basicinfo;
         public Transform CollidersTransform;
 
         public int initwait = 0;
@@ -39,6 +45,11 @@ namespace TNBKSpace
         public ShipClass ShipClass = 0;
 
         public ushort PlayerID = 0;
+
+        public bool isDestroyed = false;
+
+        public BlockBehaviour blockBehaviour;
+        public DestructionBar destructionBar;
 
         public override void SafeAwake()
         {
@@ -57,8 +68,9 @@ namespace TNBKSpace
                     child.gameObject.layer = 12;    //Adding Point
                 }
 
-                
-
+                //達成度のバーを取得
+                destructionBar = GameObject.Find("HUD").transform.Find("ProgressBar").gameObject.GetComponent<DestructionBar>();
+                Mod.destructionBar = destructionBar;
             }
             else
             {
@@ -94,6 +106,9 @@ namespace TNBKSpace
             rigidbody = GetComponent<Rigidbody>();
             rigidbody.centerOfMass += new UnityEngine.Vector3(0, -10f, 0);
 
+            progressSlider = GetSlider(Module.ProgressSlider);
+            Progress = (int)progressSlider.Value;
+
             //ホストかつマルチ時、大砲の弾にスクリプトを付ける
             if (!Mod.CannonScriptAttached && StatMaster.isHosting && StatMaster.isMP)
             {
@@ -125,6 +140,19 @@ namespace TNBKSpace
         public override void SimulateFixedUpdateHost()
         {
             base.SimulateFixedUpdateHost();
+
+            //撃沈された場合の処理（達成度を一定数減らす）
+            if(BlockBehaviour.BlockHealth.health <= 0f && !isDestroyed)
+            {
+                //達成度を減らす
+                destructionBar.AddProgress(BlockBehaviour.Team, -1f * Progress);
+
+                //クライアントに達成度を減らす命令を送る
+                Message msg = Mod.TNBKMapNetwork.ProgressType.CreateMessage((int)BlockBehaviour.Team, Progress);
+                ModNetworking.SendToAll(msg);
+
+                isDestroyed = true;
+            }
 
             if (initwait < 10)
             {

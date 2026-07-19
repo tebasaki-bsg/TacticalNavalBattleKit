@@ -31,6 +31,8 @@ namespace TNBKSpace
 
 		public static List<Block> ShipBaseList = new List<Block>();
 
+		public static DestructionBar destructionBar;	//ShipBaseが建築中SafeAwakeにて取得
+
 		/// <summary>
 		/// デバッグログ用の関数3種。主にLog()を使用
 		/// <summary>
@@ -92,6 +94,7 @@ namespace TNBKSpace
 		{
 			public static MessageType ShipIdAssignType;
 			public static MessageType VisibilityType;
+			public static MessageType ProgressType;
 
 			/// <summary>既存Mod.csのOnLoad()から1回呼ぶ</summary>
 			public static void Setup()
@@ -102,6 +105,9 @@ namespace TNBKSpace
 
 				VisibilityType = ModNetworking.CreateMessageType(DataType.IntegerArray);
 				ModNetworking.Callbacks[VisibilityType] += new Action<Message>(OnVisibilityReceived);
+
+				ProgressType = ModNetworking.CreateMessageType(DataType.Integer, DataType.Integer);	//MPTeam(int), 達成度(int)
+				ModNetworking.Callbacks[ProgressType] += new Action<Message>(OnProgressReceived);
 
 				// ---- 途中参加への対応表再送 ----
 				Events.OnPlayerJoin += new Action<Player>(OnPlayerJoin);
@@ -155,6 +161,14 @@ namespace TNBKSpace
 				TNBKShipIdAuthority.ResendAllTo(player);
 				// Assign受信側のRegisterはContainsKeyで弾くため、
 				// 万一既存プレイヤーに重複して届いても壊れない(冪等)
+			}
+
+			//達成度を変更する関数
+			public static void OnProgressReceived(Message message)
+			{
+				MPTeam team = (MPTeam)message.GetData(0);
+				destructionBar.AddProgress(team, -1f * (int)message.GetData(1));
+				
 			}
 		}
 
