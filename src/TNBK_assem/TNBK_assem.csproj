@@ -67,6 +67,7 @@
     <Compile Include="TNBKShipBaseModule.cs" />
     <Compile Include="TNBKShipIdAuthority.cs" />
     <Compile Include="TNBKStartingBlockScript.cs" />
+    <Compile Include="TNBKTeamFlagModule.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

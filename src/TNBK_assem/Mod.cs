@@ -10,6 +10,7 @@ using Modding.Serialization;
 using Modding.Modules;
 using Modding.Blocks;
 using Modding.Common;
+using UnityEngine.SceneManagement;
 using Localisation;
 
 namespace TNBKSpace
@@ -77,6 +78,7 @@ namespace TNBKSpace
 			//各ModuleとBehaviourをセットにし、XML上で使えるようにする。XMLからの読み込みとスクリプトの貼り付けはBesiege本体が行ってくれる。
 			Modding.Modules.CustomModules.AddBlockModule<TNBKShipBaseModule, TNBKShipBaseModuleBehaviour>("TNBKShipBaseModule", true);
 			Modding.Modules.CustomModules.AddBlockModule<TNBKFloatBlockModule, TNBKFloatBlockModuleBehaviour>("TNBKFloatBlockModule", true);
+			Modding.Modules.CustomModules.AddBlockModule<TNBKTeamFlagModule, TNBKTeamFlagModuleBehaviour>("TNBKTeamFlagModule", true);
 
 			//BlockSelectorを追加
 			SingleInstance<BlockSelector>.Instance.transform.parent = TNBKMod.transform;

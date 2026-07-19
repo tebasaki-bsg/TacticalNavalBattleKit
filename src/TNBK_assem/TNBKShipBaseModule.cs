@@ -185,6 +185,8 @@ namespace TNBKSpace
             Mod.CannonScriptAttached = false;
             Mod.ShipBaseList.Clear();
 
+            TNBKMapRenderer.MapVisible = false;
+
         }
     }
 }

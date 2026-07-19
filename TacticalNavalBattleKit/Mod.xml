@@ -9,7 +9,7 @@
 	<Name>TacticalNavalBattleKit</Name>
 	<Author>Tebasaki</Author> <!-- FIX: Insert your name here. -->
 	<!-- Major.Minor.Build -->
-	<Version>1.0.0</Version>
+	<Version>1.1.0</Version>
 	
 	<Description>
 Add some utilities for naval battle.  <!-- FIX: Insert a short description here. -->
@@ -94,6 +94,7 @@ Add some utilities for naval battle.  <!-- FIX: Insert a short description here.
 		<Block path="FloatBlock.xml" />		<!-- ID:1 -->
 		<Block path="DDbase.xml" />			<!-- ID:2 -->
 		<Block path="CCbase.xml" />			<!-- ID:3 -->
+		<Block path="TeamFlag.xml" />		<!-- ID:4 -->
 	</Blocks>
 	
 	<!-- Any entities (level objects) your mod adds to the game.
@@ -105,50 +106,6 @@ Add some utilities for naval battle.  <!-- FIX: Insert a short description here.
 	<!-- Any logic trigger types your mod adds to the game. -->
 	<!-- See the ModTriggers class for info on how to activate your triggers. -->
 	<Triggers>
-		<Trigger>
-			<Name>None Team Destroyed</Name>
-			<ID>0</ID>
-			<AvailableOn>
-				<AllOfficialEntities />
-				<AllModdedEntities />
-			</AvailableOn>
-		</Trigger>
-
-		<Trigger>
-			<Name>Red Team Destroyed</Name>
-			<ID>1</ID>
-			<AvailableOn>
-				<AllOfficialEntities />
-				<AllModdedEntities />
-			</AvailableOn>
-		</Trigger>
-
-		<Trigger>
-			<Name>Grean Team Destroyed</Name>
-			<ID>2</ID>
-			<AvailableOn>
-				<AllOfficialEntities />
-				<AllModdedEntities />
-			</AvailableOn>
-		</Trigger>
-
-		<Trigger>
-			<Name>Orange Team Destroyed</Name>
-			<ID>3</ID>
-			<AvailableOn>
-				<AllOfficialEntities />
-				<AllModdedEntities />
-			</AvailableOn>
-		</Trigger>
-
-		<Trigger>
-			<Name>Blue Team Destroyed</Name>
-			<ID>4</ID>
-			<AvailableOn>
-				<AllOfficialEntities />
-				<AllModdedEntities />
-			</AvailableOn>
-		</Trigger>
 		
 	</Triggers>
 	
@@ -174,6 +131,7 @@ Add some utilities for naval battle.  <!-- FIX: Insert a short description here.
 		<Mesh name="FloatBlockBody" path="object/FloatBlockBody.obj" />
 		<Mesh name="DDbaseBody" path="object/DDbaseBody.obj" />
 		<Mesh name="CCbaseBody" path="object/CCbaseBody.obj" />
+		<Mesh name="TeamFlagBody" path="object/TeamFlagBody.obj" />
 
 		<Texture name="RangeFinderBody_tex" path="png/RangeFinderBody_tex.png" />
 		<Texture name="FloatBlockBody_tex" path="png/FloatBlockBody_tex.png" />
@@ -185,6 +143,13 @@ Add some utilities for naval battle.  <!-- FIX: Insert a short description here.
 		<Texture name="Map-CC" path="png/UI/Map-CC.png" />
 		<Texture name="Map-DD" path="png/UI/Map-DD.png" />
 		<Texture name="Map-Direction" path="png/UI/Map-Direction.png" />
+
+		<Texture name="TeamRed" path="png/TeamRed.png" />
+		<Texture name="TeamBlue" path="png/TeamBlue.png" />
+		<Texture name="TeamGreen" path="png/TeamGreen.png" />
+		<Texture name="TeamOrange" path="png/TeamOrange.png" />
+		<Texture name="TeamNone" path="png/TeamNone.png" />
+		
 		<Texture name="icon" path="png/icon.png" />
 	</Resources>
 
