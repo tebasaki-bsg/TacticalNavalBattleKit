@@ -19,18 +19,25 @@ namespace TNBKSpace
     public class TNBKShipBaseModule : BlockModule
     {
         [XmlElement("ShipClass")]
-        [DefaultValue(60f)]
+        [DefaultValue(0)]
         public int ShipClass = 0;
 
         [XmlElement("ProgressSlider")]
         [RequireToValidate]
         public MSliderReference ProgressSlider;
+
+        [XmlElement("HPSlider")]
+        [RequireToValidate]
+        public MSliderReference HPSlider;
     }
 
     public class TNBKShipBaseModuleBehaviour : BlockModuleBehaviour<TNBKShipBaseModule>
     {
         public MSlider progressSlider;
         public int Progress;
+
+        public MSlider HPSlider;
+        public float HP;
 
         public BasicInfo basicinfo;
         public Transform CollidersTransform;
@@ -55,7 +62,9 @@ namespace TNBKSpace
         {
             base.SafeAwake();
 
-            if(BlockBehaviour.isBuildBlock)
+            
+
+            if (BlockBehaviour.isBuildBlock)
             {
                 //艦種を取得
                 ShipClass = (ShipClass)Module.ShipClass;
@@ -81,7 +90,6 @@ namespace TNBKSpace
                 BlockBehaviour.Team = Player.Team;
 
                 //ホストならこの艦を登録
-
                 if (StatMaster.isHosting)
                 {
                     TNBKShipIdAuthority.RegisterShip(this);
@@ -108,6 +116,12 @@ namespace TNBKSpace
 
             progressSlider = GetSlider(Module.ProgressSlider);
             Progress = (int)progressSlider.Value;
+
+            //HPを取得し変更
+            HPSlider = GetSlider(Module.HPSlider);
+            BlockBehaviour.BlockHealth.maxHealth = HPSlider.Value;
+            BlockBehaviour.BlockHealth.health = HPSlider.Value;
+            HP = HPSlider.Value;
 
             //ホストかつマルチ時、大砲の弾にスクリプトを付ける
             if (!Mod.CannonScriptAttached && StatMaster.isHosting && StatMaster.isMP)

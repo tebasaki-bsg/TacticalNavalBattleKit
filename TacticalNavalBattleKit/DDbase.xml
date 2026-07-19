@@ -66,6 +66,7 @@
 		 Check the documentation for more information on how to use modules. -->
 	<ModuleMapperTypes>
 		<Slider displayName="Cost" key="progress" min="1.0" max="100.0" default="15.0" unclamped="true"/>
+		<Slider displayName="HP" key="hp" min="1.0" max="100.0" default="30.0" unclamped="true"/>
 
 	</ModuleMapperTypes>
 
@@ -73,6 +74,7 @@
 		<TNBKShipBaseModule modid="07b51958-0fed-4d81-a5f1-69587a93a72e">
 			<ShipClass>0</ShipClass>	<!-- 0:DD 1:CC 2:BB 3:CV -->
 			<ProgressSlider key="progress" />
+			<HPSlider key="hp" />
 		</TNBKShipBaseModule>
 	</Modules>
 	
