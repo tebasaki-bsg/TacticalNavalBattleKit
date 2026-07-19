@@ -195,7 +195,10 @@ namespace TNBKSpace
 			{"Cannon", typeof(TNBKCannonScript) },
 
 			//ƒ{ƒ€
-			{"Bomb", typeof(TNBKBombScript) }
+			{"Bomb", typeof(TNBKBombScript) },
+
+			//ƒ{ƒ€
+			{"NauticalScrew", typeof(TNBKNauticalScrewScript) }
 
 		};
 

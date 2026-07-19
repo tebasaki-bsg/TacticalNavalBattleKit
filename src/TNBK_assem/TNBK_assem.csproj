@@ -62,6 +62,7 @@
     <Compile Include="TNBKMapRenderer.cs" />
     <Compile Include="TNBKMapVisibilityClient.cs" />
     <Compile Include="TNBKMapVisibilityHost.cs" />
+    <Compile Include="TNBKNauticalScrewScript.cs" />
     <Compile Include="TNBKShipEntry.cs" />
     <Compile Include="TNBKFloatBlockModule.cs" />
     <Compile Include="TNBKShipBaseModule.cs" />
