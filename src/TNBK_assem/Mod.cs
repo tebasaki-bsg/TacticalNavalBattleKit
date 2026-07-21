@@ -119,8 +119,6 @@ HUDProjectorオプション：
 
 				Modding.ModIO.WriteAllText(path, text, true);
 			}
-
-
 		}
 
 		public static class TNBKMapNetwork
@@ -236,7 +234,6 @@ HUDProjectorオプション：
 				
 			}
 		}
-
 	}
 
 	/// <summary>

@@ -22,7 +22,7 @@ namespace TNBKSpace
         private const int IslandLayerMask = 1 << 29;
 
         private int frameCounter;
-        private bool wasSimulating;
+        private bool wasSimulating = false;
 
         // グレース期間: チームごとに「敵艦ID → 最後に可視だった時刻」
         private readonly Dictionary<MPTeam, Dictionary<ushort, float>> lastSeen
@@ -68,7 +68,18 @@ namespace TNBKSpace
             // --- フォールバック: シミュ終了エッジ検出(全マシン) ---
             // 主経路はOnSimulateStop。冪等なので二重に走っても壊れない
             if (wasSimulating && !sim)
+            {
                 TNBKMapSession.OnSessionEnd();
+            }
+
+            //シミュがスタートした瞬間
+            /*
+            if(!wasSimulating && sim)
+            {
+                
+            }
+            */
+
             wasSimulating = sim;
 
             // --- Assign解決の保留キュー再試行(全マシン) ---
