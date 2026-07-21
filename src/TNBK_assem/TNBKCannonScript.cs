@@ -24,15 +24,25 @@ namespace TNBKSpace
         }
     }
 
+    //大砲の弾に追加するスクリプト
     public class TNBKCannonProjectileScript : MonoBehaviour
     {
         public LayerMask layerMask = 1 << 17;
 
         public Collider[] colliders;
         public BlockBehaviour blockBehaviour;
+        public Rigidbody rigidbody;
 
         public UnityEngine.Vector3 prevpos;
 
+        //空気抵抗を0にする
+        public void Awake()
+        {
+            rigidbody = GetComponent<Rigidbody>();
+            rigidbody.drag = 0f;
+        }
+
+        //最後の場所を記録する（OnDisableの前に場所が移動してしまうため）
         public void FixedUpdate()
         {
             prevpos = transform.position;
@@ -46,7 +56,7 @@ namespace TNBKSpace
             foreach(Collider col in colliders)
             {
                 blockBehaviour = col.gameObject.transform.parent.transform.parent.GetComponent<BlockBehaviour>();
-                blockBehaviour.BlockHealth.DamageBlock(1f);
+                blockBehaviour.BlockHealth.DamageBlock(1.6f * transform.localScale.x);
                 blockBehaviour.BlockHealth.health --;
 
             }
