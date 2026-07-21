@@ -67,7 +67,8 @@
 	<ModuleMapperTypes>
 		<Slider displayName="Cost" key="progress" min="1.0" max="100.0" default="15.0" unclamped="true"/>
 		<Slider displayName="HP" key="hp" min="1.0" max="100.0" default="30.0" unclamped="true"/>
-
+		<Slider displayName="Rader Range" key="rader-range" min="1.0" max="1000.0" default="700.0" unclamped="false"/>
+		
 	</ModuleMapperTypes>
 
 	<Modules>
@@ -75,6 +76,7 @@
 			<ShipClass>0</ShipClass>	<!-- 0:DD 1:CC 2:BB 3:CV -->
 			<ProgressSlider key="progress" />
 			<HPSlider key="hp" />
+			<RaderRangeSlider key="rader-range" />
 		</TNBKShipBaseModule>
 	</Modules>
 	

@@ -30,14 +30,8 @@ namespace TNBKSpace
         {
             get
             {
-                // ★1 艦種プロパティ名は仮。艦種追加の予定があるため、
-                //     将来的にはModule側にDetectionRadiusを持たせる形を推奨
-                switch (Module.ShipClass)
-                {
-                    case ShipClass.DD: return 700f;
-                    case ShipClass.CC: return 500f;
-                    default: return 500f;   // 未知の艦種は安全側(狭い方)
-                }
+                //探索距離をModule側に付ける
+                return Module.RaderRange;
             }
         }
     }

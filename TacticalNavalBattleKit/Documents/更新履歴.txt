@@ -15,3 +15,6 @@ ver1.4.0
 
 ver1.5.0
 ・HUDProjectorを追加
+
+ver1.6.0
+・探知距離を設定可能に

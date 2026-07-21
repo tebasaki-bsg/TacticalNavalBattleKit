@@ -29,6 +29,10 @@ namespace TNBKSpace
         [XmlElement("HPSlider")]
         [RequireToValidate]
         public MSliderReference HPSlider;
+
+        [XmlElement("RaderRangeSlider")]
+        [RequireToValidate]
+        public MSliderReference RaderRangeSlider;
     }
 
     public class TNBKShipBaseModuleBehaviour : BlockModuleBehaviour<TNBKShipBaseModule>
@@ -38,6 +42,9 @@ namespace TNBKSpace
 
         public MSlider HPSlider;
         public float HP;
+
+        public MSlider RaderRangeSlider;
+        public float RaderRange;
 
         //反転用
         public MToggle ReverseToggle;
@@ -125,6 +132,9 @@ namespace TNBKSpace
 
             progressSlider = GetSlider(Module.ProgressSlider);
             Progress = (int)progressSlider.Value;
+
+            RaderRangeSlider = GetSlider(Module.RaderRangeSlider);
+            RaderRange = RaderRangeSlider.Value;
 
             //HPを取得し変更
             HPSlider = GetSlider(Module.HPSlider);
