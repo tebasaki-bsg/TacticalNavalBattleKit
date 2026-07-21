@@ -1,0 +1,6 @@
+ブロックIDは原則追加順です
+ 0: RangeFinder
+ 1: FloatBlock
+ 2: DDbase
+ 3: CCbase
+ 4: TeamFlag
