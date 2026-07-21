@@ -38,6 +38,7 @@ namespace TNBKSpace
         public static Texture2D CullentHUDTex;
         public static Sprite CullentHUDSprite;
         public static Image CullentHUDImage;
+        public static RectTransform CullentHUDRectTransform;
 
         public MSlider ScaleSlider;
         public MSlider AlphaSlider;
@@ -54,6 +55,8 @@ namespace TNBKSpace
         public Texture2D HUDTex;
 
         public bool isOwnerSame = false;
+
+        public bool BuildInit = false;
 
         public override void SafeAwake()
         {
@@ -87,7 +90,8 @@ namespace TNBKSpace
                     CullentHUDObject = new GameObject("TNBK_HUD");
                     CullentHUDObject.transform.SetParent(Mod.TNBKMod.transform);   //Modオブジェクトの子に
                     CullentHUDObject.layer = 12;   //HUD
-
+                    CullentHUDObject.SetActive(false);
+                    
                     //Spriteを作成し、CullentHUDTexにそのSpriteのテクスチャを代入
                     //デフォ画像を拾ってくる
                     Texture2D tex = ModTexture.GetTexture("DefaultHUD");
@@ -97,18 +101,24 @@ namespace TNBKSpace
                     //Imageコンポーネントを追加し、Spriteに作ったSpriteを割り当て
                     CullentHUDImage = CullentHUDObject.AddComponent<Image>();
                     CullentHUDImage.sprite = CullentHUDSprite;
-                }
-            }
-            //シミュ中⇒画像を読み込む
-            else
-            {
-                if(!isOwnerSame)
-                {
-                    return;
+
+                    //RectTransformを追加（画像用のtransform）
+                    CullentHUDRectTransform = CullentHUDObject.GetComponent<RectTransform>();
+                    CullentHUDRectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+                    CullentHUDRectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+                    CullentHUDRectTransform.sizeDelta = new Vector2(CullentHUDTex.width, CullentHUDTex.height);
+                    CullentHUDRectTransform.anchoredPosition = Vector2.zero;
                 }
 
-                //画像読み込み
-                ReadTexture();
+
+            }
+        }
+
+        public void Start()
+        {
+            if(BlockBehaviour.isBuildBlock)
+            {
+                BuildInit = true;
             }
         }
 
@@ -120,6 +130,9 @@ namespace TNBKSpace
             {
                 return;
             }
+
+            //画像読み込み
+            ReadTexture();
 
             ScaleSlider = GetSlider(Module.ScaleSlider);
             AlphaSlider = GetSlider(Module.AlphaSlider);
@@ -141,6 +154,13 @@ namespace TNBKSpace
             {
                 ChangeTexture(HUDTex);
             }
+        }
+
+        public override void OnSimulateStop()
+        {
+            base.OnSimulateStop();
+
+            CullentHUDObject.SetActive(false);
         }
 
         //プレイヤーのIDとブロックの親のIDを比べる関数
@@ -175,7 +195,8 @@ namespace TNBKSpace
         //画像フォルダを開く関数
         public void OpenFolder(bool value)
         {
-            if (BlockBehaviour.isBuildBlock)
+            //建築中かつトグルのデフォルト設定が終わっていたらフォルダを開く
+            if (BlockBehaviour.isBuildBlock && BuildInit)
             {
                 Modding.ModIO.OpenFolderInFileBrowser(Mod.FolderName, true);
                 OpenFolderToggle.IsActive = false;
@@ -206,6 +227,14 @@ namespace TNBKSpace
             //HUDの画像が同じ場合：オンオフを変える
             if(CullentHUDTex == tex)
             {
+                //デフォ画像を使用する場合も大きさ・色は変わっていないため先に変える
+
+                //大きさの適用
+                CullentHUDRectTransform.sizeDelta = new Vector2(CullentHUDTex.width * ScaleSlider.Value, CullentHUDTex.height * ScaleSlider.Value);
+
+                //色を変える
+                CullentHUDImage.color = color;
+
                 CullentHUDObject.SetActive(!CullentHUDObject.activeInHierarchy);
             }
             //違う場合：画像を変え、オンにする
@@ -213,15 +242,18 @@ namespace TNBKSpace
             {
                 //新しくスプライトを作る
                 CullentHUDSprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
-                //CullentHUDImage.sprite = CullentHUDSprite;
+                CullentHUDImage.sprite = CullentHUDSprite;
 
                 //色を変える
                 CullentHUDImage.color = color;
 
-                CullentHUDObject.SetActive(true);
-
                 //画像を更新
                 CullentHUDTex = tex;
+
+                //大きさを新しい画像に合わせる
+                CullentHUDRectTransform.sizeDelta = new Vector2(CullentHUDTex.width * ScaleSlider.Value, CullentHUDTex.height * ScaleSlider.Value);
+
+                CullentHUDObject.SetActive(true);
             }
         }
 

@@ -76,7 +76,7 @@ namespace TNBKSpace
 			TNBKMod = new GameObject("TNBKMod");
 			UnityEngine.Object.DontDestroyOnLoad(TNBKMod);
 			Canvas val = TNBKMod.AddComponent<Canvas>();
-			val.renderMode = 0;
+			val.renderMode = RenderMode.ScreenSpaceOverlay;
 			val.sortingOrder = 0;
 			val.gameObject.layer = LayerMask.NameToLayer("HUD");
 			TNBKMod.AddComponent<CanvasScaler>().scaleFactor = 1f;   //画面サイズに応じてUIをスケーリングするためのコンポーネントをアタッチする
