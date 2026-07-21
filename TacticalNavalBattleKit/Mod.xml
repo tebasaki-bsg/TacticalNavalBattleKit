@@ -9,7 +9,7 @@
 	<Name>TacticalNavalBattleKit</Name>
 	<Author>Tebasaki</Author> <!-- FIX: Insert your name here. -->
 	<!-- Major.Minor.Build -->
-	<Version>1.3.0</Version>
+	<Version>1.4.0</Version>
 	
 	<Description>
 Add some utilities for naval battle.  <!-- FIX: Insert a short description here. -->
@@ -95,6 +95,7 @@ Add some utilities for naval battle.  <!-- FIX: Insert a short description here.
 		<Block path="DDbase.xml" />			<!-- ID:2 -->
 		<Block path="CCbase.xml" />			<!-- ID:3 -->
 		<Block path="TeamFlag.xml" />		<!-- ID:4 -->
+		<Block path="HUDProjector.xml" />
 	</Blocks>
 	
 	<!-- Any entities (level objects) your mod adds to the game.
@@ -133,11 +134,13 @@ Add some utilities for naval battle.  <!-- FIX: Insert a short description here.
 		<Mesh name="DDbaseBody" path="object/DDbaseBody.obj" />
 		<Mesh name="CCbaseBody" path="object/CCbaseBody.obj" />
 		<Mesh name="TeamFlagBody" path="object/TeamFlagBody.obj" />
+		<Mesh name="HUDProjectorBody" path="object/HUDProjectorBody.obj" />
 
 		<Texture name="RangeFinderBody_tex" path="png/RangeFinderBody_tex.png" />
 		<Texture name="FloatBlockBody_tex" path="png/FloatBlockBody_tex.png" />
 		<Texture name="DDbaseBody_tex" path="png/DDbaseBody_tex.png" />
 		<Texture name="CCbaseBody_tex" path="png/CCbaseBody_tex.png" />
+		<Texture name="HUDProjectorBody_tex" path="png/HUDProjectorBody_tex.png" />
 
 		<Texture name="Map-Background" path="png/UI/Map-BackgroundV2.png" />
 		<Texture name="Map-BB" path="png/UI/Map-BB.png" />
@@ -153,6 +156,8 @@ Add some utilities for naval battle.  <!-- FIX: Insert a short description here.
 		<Texture name="TeamGreen" path="png/TeamGreen.png" />
 		<Texture name="TeamOrange" path="png/TeamOrange.png" />
 		<Texture name="TeamNone" path="png/TeamNone.png" />
+
+		<Texture name="DefaultHUD" path="png/UI/DefaultHUD.png" />
 		
 		<Texture name="icon" path="png/icon.png" />
 	</Resources>

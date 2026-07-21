@@ -12,3 +12,6 @@ ver1.3.0
 
 ver1.4.0
 ・ShipBaseに反転機能を追加
+
+ver1.5.0
+・HUDProjectorを追加

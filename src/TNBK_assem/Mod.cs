@@ -32,7 +32,23 @@ namespace TNBKSpace
 
 		public static List<Block> ShipBaseList = new List<Block>();
 
-		public static DestructionBar destructionBar;	//ShipBaseが建築中SafeAwakeにて取得
+		public static DestructionBar destructionBar;    //ShipBaseが建築中SafeAwakeにて取得
+
+		//フォルダ名とパス
+		public static string FolderName
+		{
+			get
+			{
+				return "HUDImages";
+			}
+		}
+		public static string path
+		{
+			get
+			{
+				return Application.dataPath + "/Mods/Data/TacticalNavalBattleKit_07b51958-0fed-4d81-a5f1-69587a93a72e/" + FolderName;
+			}
+		}
 
 		/// <summary>
 		/// デバッグログ用の関数3種。主にLog()を使用
@@ -59,11 +75,19 @@ namespace TNBKSpace
 			//TNBKModを作成、シーンチェンジしても壊さないように
 			TNBKMod = new GameObject("TNBKMod");
 			UnityEngine.Object.DontDestroyOnLoad(TNBKMod);
+			Canvas val = TNBKMod.AddComponent<Canvas>();
+			val.renderMode = 0;
+			val.sortingOrder = 0;
+			val.gameObject.layer = LayerMask.NameToLayer("HUD");
+			TNBKMod.AddComponent<CanvasScaler>().scaleFactor = 1f;   //画面サイズに応じてUIをスケーリングするためのコンポーネントをアタッチする
+
+
 
 			//各ModuleとBehaviourをセットにし、XML上で使えるようにする。XMLからの読み込みとスクリプトの貼り付けはBesiege本体が行ってくれる。
 			Modding.Modules.CustomModules.AddBlockModule<TNBKShipBaseModule, TNBKShipBaseModuleBehaviour>("TNBKShipBaseModule", true);
 			Modding.Modules.CustomModules.AddBlockModule<TNBKFloatBlockModule, TNBKFloatBlockModuleBehaviour>("TNBKFloatBlockModule", true);
 			Modding.Modules.CustomModules.AddBlockModule<TNBKTeamFlagModule, TNBKTeamFlagModuleBehaviour>("TNBKTeamFlagModule", true);
+			Modding.Modules.CustomModules.AddBlockModule<TNBKHUDProjectorModule, TNBKHUDProjectorModuleBehaviour>("TNBKHUDProjectorModule", true);
 
 			//BlockSelectorを追加
 			SingleInstance<BlockSelector>.Instance.transform.parent = TNBKMod.transform;
@@ -74,7 +98,29 @@ namespace TNBKSpace
 			//17番レイヤーの当たり判定を整備
 			Physics.IgnoreLayerCollision(0, 17, false); //0: ブロック、マップオブジェクト、大砲の弾
 			Physics.IgnoreLayerCollision(26, 17, false); //26: 一部ブロック
-			Physics.IgnoreLayerCollision(29, 17, false);	//29: 床
+			Physics.IgnoreLayerCollision(29, 17, false);    //29: 床
+
+			//Data内にフォルダを作成
+			if (!Modding.ModIO.ExistsDirectory(FolderName, true)) //無ければ、ディレクトリを生成
+			{
+				Modding.ModIO.CreateDirectory(FolderName, true);
+				Log("Created HUDImages folder in " + Application.dataPath + "/Mods/Data/TacticalNavalBattleKit_07b51958-0fed-4d81-a5f1-69587a93a72e/");
+
+				string path = FolderName + "/readme.txt";
+				string text = @"HUDProjectorの簡単な使い方：
+①表示したいPNGファイルをこのフォルダに入れる
+②HUDProjectorの設定を開き、「画像名/PNG Name」の部分にPNGファイルの名前を入れる（.pngは不要）
+③「画像を適用」を押す
+
+HUDProjectorオプション：
+・Scale：画像の大きさ
+・Alpha：画像の不透明度
+・Color：画像に上からかける色。#000000（黒）だと真っ黒に、#FFFFFF（白）だと真っ白になる";
+
+				Modding.ModIO.WriteAllText(path, text, true);
+			}
+
+
 		}
 
 		public static class TNBKMapNetwork

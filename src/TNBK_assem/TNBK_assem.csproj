@@ -59,6 +59,7 @@
     <Compile Include="TNBKBombScript.cs" />
     <Compile Include="TNBKCameraBlockScript.cs" />
     <Compile Include="TNBKCannonScript.cs" />
+    <Compile Include="TNBKHUDProjectorModule.cs" />
     <Compile Include="TNBKMapRenderer.cs" />
     <Compile Include="TNBKMapSession.cs" />
     <Compile Include="TNBKMapVisibilityClient.cs" />
