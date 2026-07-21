@@ -39,6 +39,10 @@ namespace TNBKSpace
         public MSlider HPSlider;
         public float HP;
 
+        //反転用
+        public MToggle ReverseToggle;
+        public bool Reversed;
+
         public BasicInfo basicinfo;
         public Transform CollidersTransform;
 
@@ -80,6 +84,11 @@ namespace TNBKSpace
                 //達成度のバーを取得
                 destructionBar = GameObject.Find("HUD").transform.Find("ProgressBar").gameObject.GetComponent<DestructionBar>();
                 Mod.destructionBar = destructionBar;
+
+                //反転モード用のトグルを追加
+                ReverseToggle = BlockBehaviour.AddToggle(Mod.isJapanese ? "反転" : "Reverse Body", "reverse", false);
+                ReverseToggle.DisplayInMapper = true;
+                ReverseToggle.Toggled += ApplyReverse;
             }
             else
             {
@@ -201,6 +210,58 @@ namespace TNBKSpace
 
             TNBKMapRenderer.MapVisible = false;
 
+        }
+
+        //反転を適用させる関数
+        public void ApplyReverse(bool value)
+        {
+            //オフの時
+            if(!value)
+            {
+                //既に通常化していたらスルー
+                if(!Reversed)
+                {
+                    Reversed = value;
+
+                    return;
+                }
+                //されていなければ180°回転
+                else
+                {
+                    Transform VisTrans = transform.Find("Vis");
+                    Transform ColsTrans = transform.Find("Colliders");
+
+                    //回転させる
+                    VisTrans.rotation = VisTrans.rotation * new Quaternion(0, 1, 0, 0);
+                    ColsTrans.rotation = ColsTrans.rotation * new Quaternion(0, 1, 0, 0);
+
+                    Reversed = value;
+                }
+            }
+            //オンの時
+            else
+            {
+                //すでに反転されていたらスルー
+                if (Reversed)
+                {
+                    Reversed = value;
+
+                    return;
+                }
+                else
+                {
+                    Transform VisTrans = transform.Find("Vis");
+                    Transform ColsTrans = transform.Find("Colliders");
+
+                    //回転させる
+                    VisTrans.rotation = VisTrans.rotation * new Quaternion(0, 1, 0, 0);
+                    ColsTrans.rotation = ColsTrans.rotation * new Quaternion(0, 1, 0, 0);
+
+                    Reversed = value;
+                }
+
+
+            }
         }
     }
 }
