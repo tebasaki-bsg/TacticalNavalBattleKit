@@ -86,8 +86,48 @@ namespace TNBKSpace
             frameCounter = 0;
 
             RunVisibilityCheckAndSend();
+            RunPinBroadcast();
         }
 
+        // ピンの期限切れ処理とチーム別スナップショット配信。
+        // 可視判定と同じ送信周期(10物理フレーム)に相乗りさせる
+        private void RunPinBroadcast()
+        {
+            // 期限切れピンを除去(自動消滅はホストで一元管理し、
+            // フルスナップショットで「消えた状態」を全員に届ける)
+            TNBKPinAuthority.PurgeExpired(Time.time);
+
+            List<Player> allPlayers = Player.GetAllPlayers();
+            Player local = Player.GetLocalPlayer();
+            bool localIsSpectator =
+                StatMaster.PlayMode == BesiegePlayMode.Spectator;
+
+            foreach (MPTeam team in TNBKTeamUtil.AllTeams)
+            {
+                int[] owners;
+                float[] coords;
+                TNBKPinAuthority.BuildSnapshot(team, out owners, out coords);
+
+                // ホスト自身がこのチームの非観戦プレイヤーなら直書き
+                if (!localIsSpectator && local != null && local.Team == team)
+                    TNBKPinClient.ApplySnapshot(owners, coords);
+
+                // 同チームの非観戦プレイヤーへ配信
+                for (int i = 0; i < allPlayers.Count; i++)
+                {
+                    Player p = allPlayers[i];
+                    if (p == local) continue;
+                    if (p.IsSpectator) continue;   // 観戦者はピンを見られない
+                    if (p.Team != team) continue;
+
+                    Message msg = Mod.TNBKMapNetwork.PinSnapshotType
+                        .CreateMessage((object)owners, (object)coords);
+                    ModNetworking.SendTo(p, msg);
+                }
+            }
+        }
+
+        //可視艦リストを更新する関数
         private void RunVisibilityCheckAndSend()
         {
             float now = Time.time;
@@ -98,6 +138,7 @@ namespace TNBKSpace
             bool localIsSpectator =
                 StatMaster.PlayMode == BesiegePlayMode.Spectator;
 
+            //各チームごとに可視艦を確認、そのチーム全員に送信させる
             foreach (MPTeam team in TNBKTeamUtil.AllTeams)
             {
                 List<TNBKShipEntry> friendly = TNBKShipRegistry.GetTeam(team);
@@ -152,6 +193,7 @@ namespace TNBKSpace
             return false;
         }
 
+        //チームに可視艦の情報を送る関数
         private void DeliverToTeam(MPTeam team, List<ushort> ids,
                                    List<Player> allPlayers, Player local,
                                    bool localIsSpectator)

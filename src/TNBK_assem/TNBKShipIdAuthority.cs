@@ -62,24 +62,4 @@ namespace TNBKSpace
             assigned.Clear();
         }
     }
-
-    //シミュ停止時に艦船の登録を解除する関数
-    public static class TNBKMapSession
-    {
-        /// <summary>
-        /// TNBKShipBaseModuleBehaviour.OnSimulateStop から呼ぶ(全艦分が多重発火するが
-        /// 全処理が冪等なので無害)。加えてTNBKMapVisibilityHostのエッジ検出が
-        /// フォールバックとして同じものを呼ぶ
-        /// </summary>
-        public static void OnSessionEnd()
-        {
-            TNBKShipRegistry.Clear();
-            TNBKShipIdAuthority.Clear();        // ホスト以外で呼んでも無害
-            TNBKMapVisibilityClient.Clear();
-            TNBKPendingAssigns.Clear();
-            TNBKCameraBlockScript.ActiveLocalCamera = null;
-            if (TNBKMapVisibilityHost.Instance != null)
-                TNBKMapVisibilityHost.Instance.ResetState();
-        }
-    }
 }

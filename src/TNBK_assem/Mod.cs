@@ -60,21 +60,6 @@ namespace TNBKSpace
 			TNBKMod = new GameObject("TNBKMod");
 			UnityEngine.Object.DontDestroyOnLoad(TNBKMod);
 
-			/*
-			//TNBKModにCanvasを追加
-			Canvas val = TNBKMod.AddComponent<Canvas>();
-			val.renderMode = 0;	//ヒエラルキー最上位じゃないとダメらしいのでTNBKModに直接追加する
-			val.sortingOrder = 0;	//最前列
-			val.gameObject.layer = LayerMask.NameToLayer("HUD");	//13
-			TNBKMod.AddComponent<CanvasScaler>().scaleFactor = 1f;   //画面サイズに応じてUIをスケーリングするためのコンポーネントをアタッチする
-
-			//ミニマップ等を格納する用TNBK_UI
-			MapObject = new GameObject("MapObject");
-			MapObject.transform.SetParent(TNBKMod.transform);
-			MapObject.layer = LayerMask.NameToLayer("HUD");    //13
-
-			*/
-
 			//各ModuleとBehaviourをセットにし、XML上で使えるようにする。XMLからの読み込みとスクリプトの貼り付けはBesiege本体が行ってくれる。
 			Modding.Modules.CustomModules.AddBlockModule<TNBKShipBaseModule, TNBKShipBaseModuleBehaviour>("TNBKShipBaseModule", true);
 			Modding.Modules.CustomModules.AddBlockModule<TNBKFloatBlockModule, TNBKFloatBlockModuleBehaviour>("TNBKFloatBlockModule", true);
@@ -97,6 +82,8 @@ namespace TNBKSpace
 			public static MessageType ShipIdAssignType;
 			public static MessageType VisibilityType;
 			public static MessageType ProgressType;
+			public static MessageType PinSetType;
+			public static MessageType PinSnapshotType;
 
 			/// <summary>既存Mod.csのOnLoad()から1回呼ぶ</summary>
 			public static void Setup()
@@ -110,6 +97,15 @@ namespace TNBKSpace
 
 				ProgressType = ModNetworking.CreateMessageType(DataType.Integer, DataType.Integer);	//MPTeam(int), 達成度(int)
 				ModNetworking.Callbacks[ProgressType] += new Action<Message>(OnProgressReceived);
+
+				// ピン: プレイヤーが刺した座標(x, z)をホストへ
+				PinSetType = ModNetworking.CreateMessageType(DataType.Single, DataType.Single);
+				ModNetworking.Callbacks[PinSetType]	+= new Action<Message>(OnPinSetReceived);
+
+				// ピン: ホストがチームへ配る全ピンスナップショット
+				PinSnapshotType = ModNetworking.CreateMessageType(DataType.IntegerArray, DataType.SingleArray);
+				ModNetworking.Callbacks[PinSnapshotType]	+= new Action<Message>(OnPinSnapshotReceived);
+
 
 				// ---- 途中参加への対応表再送 ----
 				Events.OnPlayerJoin += new Action<Player>(OnPlayerJoin);
@@ -155,6 +151,27 @@ namespace TNBKSpace
 			{
 				int[] ids = (int[])message.GetData(0);
 				TNBKMapVisibilityClient.ApplySnapshot(ids);
+			}
+
+			// プレイヤーが刺したピンをホストが受信 → 集約
+			private static void OnPinSetReceived(Message message)
+			{
+				// ホストのみが受け取る想定(SendToHostで送られてくる)。
+				// 送信者は message.Sender で取得できる(実APIのプロパティ名に合わせる)
+				Player sender = message.Sender;
+				if (sender == null) return;
+
+				float x = (float)message.GetData(0);
+				float z = (float)message.GetData(1);
+				TNBKPinAuthority.SetPin(sender, x, z);
+			}
+
+			// ホストが配るピンスナップショットをクライアントが受信
+			private static void OnPinSnapshotReceived(Message message)
+			{
+				int[] owners = (int[])message.GetData(0);
+				float[] coords = (float[])message.GetData(1);
+				TNBKPinClient.ApplySnapshot(owners, coords);
 			}
 
 			public static void OnPlayerJoin(Player player)

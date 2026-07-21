@@ -11,7 +11,7 @@ namespace TNBKSpace
 {
     public class TNBKStartingBlockScript : BlockScript
     {
-        public BlockBehaviour blockbehaviour;
+        public BlockBehaviour blockBehaviour;
 
         public MSlider ScaleSlider;
         public MSlider OffsetSliderX;
@@ -21,16 +21,16 @@ namespace TNBKSpace
 
         public void Awake()
         {
-            blockbehaviour = GetComponent<BlockBehaviour>();
+            blockBehaviour = GetComponent<BlockBehaviour>();
 
             //ScaleとOffsetのスライダーを追加
-            ScaleSlider = blockbehaviour.AddSlider("Scale X", "map-scale", 0.4f, 0.01f, 5f);
+            ScaleSlider = blockBehaviour.AddSlider("Scale X", "map-scale", 0.4f, 0.01f, 5f);
             ScaleSlider.DisplayInMapper = true;
 
-            OffsetSliderX = blockbehaviour.AddSlider("Offset X", "map-offset-x", -700f, -1000f, 1000f);
+            OffsetSliderX = blockBehaviour.AddSlider("Offset X", "map-offset-x", -700f, -1000f, 1000f);
             OffsetSliderX.DisplayInMapper = true;
 
-            OffsetSliderY = blockbehaviour.AddSlider("Offset Y", "map-offset-y", 300f, -1000f, 1000f);
+            OffsetSliderY = blockBehaviour.AddSlider("Offset Y", "map-offset-y", 300f, -1000f, 1000f);
             OffsetSliderY.DisplayInMapper = true;
         }
 
@@ -41,7 +41,7 @@ namespace TNBKSpace
             TNBKMapRenderer.MapScale = ScaleSlider.Value;   //デフォで960x960
             TNBKMapRenderer.MapPosition = new UnityEngine.Vector2(OffsetSliderX.Value, OffsetSliderY.Value);
 
-            if (!blockbehaviour.isBuildBlock)
+            if (!blockBehaviour.isBuildBlock)
             {
                 UpdateOwnerFlag();
             }
@@ -69,7 +69,7 @@ namespace TNBKSpace
 
             if (StatMaster.isMP)
             {
-                BlockPlayerID = blockbehaviour.ParentMachine.PlayerID;
+                BlockPlayerID = blockBehaviour.ParentMachine.PlayerID;
 
                 if (StatMaster.PlayMode == BesiegePlayMode.Spectator)   //観戦モード
                 {

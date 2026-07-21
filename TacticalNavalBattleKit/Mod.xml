@@ -9,7 +9,7 @@
 	<Name>TacticalNavalBattleKit</Name>
 	<Author>Tebasaki</Author> <!-- FIX: Insert your name here. -->
 	<!-- Major.Minor.Build -->
-	<Version>1.2.0</Version>
+	<Version>1.3.0</Version>
 	
 	<Description>
 Add some utilities for naval battle.  <!-- FIX: Insert a short description here. -->
@@ -119,6 +119,7 @@ Add some utilities for naval battle.  <!-- FIX: Insert a short description here.
 	<Keys>
 		<!--<Key name="Sample Key" defaultModifier="LeftControl" defaultTrigger="U" />-->
 		<Key name="Show Minimap" defaultModifier="None" defaultTrigger="F5" />
+		<Key name="Pin on Minimap" defaultModifier="None" defaultTrigger="P" />
 	</Keys>
 	
 	<!-- The mod loader will automatically make all resources listed here available
@@ -138,11 +139,14 @@ Add some utilities for naval battle.  <!-- FIX: Insert a short description here.
 		<Texture name="DDbaseBody_tex" path="png/DDbaseBody_tex.png" />
 		<Texture name="CCbaseBody_tex" path="png/CCbaseBody_tex.png" />
 
-		<Texture name="Map-Background" path="png/UI/Map-Background.png" />
+		<Texture name="Map-Background" path="png/UI/Map-BackgroundV2.png" />
 		<Texture name="Map-BB" path="png/UI/Map-BB.png" />
 		<Texture name="Map-CC" path="png/UI/Map-CC.png" />
 		<Texture name="Map-DD" path="png/UI/Map-DD.png" />
+		<Texture name="Map-CV" path="png/UI/Map-CV.png" />
+		<Texture name="Map-EX" path="png/UI/Map-EX.png" />
 		<Texture name="Map-Direction" path="png/UI/Map-Direction.png" />
+		<Texture name="Map-Pin" path="png/UI/Map-Pin.png" />
 
 		<Texture name="TeamRed" path="png/TeamRed.png" />
 		<Texture name="TeamBlue" path="png/TeamBlue.png" />

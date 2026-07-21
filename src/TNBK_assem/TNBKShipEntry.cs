@@ -155,6 +155,7 @@ namespace TNBKSpace
         DD, //0
         CC, //1
         BB, //2
-        CV	//3
+        CV,	//3
+        EX  //4
     }
 }
