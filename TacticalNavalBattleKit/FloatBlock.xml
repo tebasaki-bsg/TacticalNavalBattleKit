@@ -158,8 +158,8 @@
 		</BoxCollider>
 	</Colliders>
 	
-	<BasePoint hasAddingPoint="true">
-		<Stickiness enabled="true" radius="5.5" />
+	<BasePoint hasAddingPoint="false">
+		<Stickiness enabled="true" radius="0.8" />
 		<!-- Can only have motion if sticky -->
 		<Motion x="false" y="false" z="false" /> <!-- Optional -->
 	</BasePoint>

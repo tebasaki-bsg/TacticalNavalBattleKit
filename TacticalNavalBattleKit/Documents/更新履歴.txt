@@ -18,3 +18,7 @@ ver1.5.0
 
 ver1.6.0
 ・探知距離を設定可能に
+
+ver1.6.1
+・FloatBlockの被接続を削除
+・FloatBlockの接続判定を縮小
