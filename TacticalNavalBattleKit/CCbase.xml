@@ -77,6 +77,7 @@
 			<ProgressSlider key="progress" />
 			<HPSlider key="hp" />
 			<RaderRangeSlider key="rader-range" />
+			<JointOffset>-9</JointOffset>
 		</TNBKShipBaseModule>
 	</Modules>
 	
@@ -157,9 +158,9 @@
 		<!-- TODO: Insert Collider definitions here.
 			 Examples: -->
 		<BoxCollider>
-			<Position x="0.0" y="-0.25" z="0.0" />
+			<Position x="0.0" y="-1.0" z="0.0" />
 			<Rotation x="0.0" y="0.0" z="0.0" />
-			<Scale x="4.5" y="4.0" z="57.0" />
+			<Scale x="4.5" y="5.5" z="57.0" />
 		</BoxCollider>
 
 		<BoxCollider>

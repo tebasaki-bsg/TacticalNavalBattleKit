@@ -33,6 +33,10 @@ namespace TNBKSpace
         [XmlElement("RaderRangeSlider")]
         [RequireToValidate]
         public MSliderReference RaderRangeSlider;
+
+        [XmlElement("JointOffset")]
+        [DefaultValue(0)]
+        public float JointOffset = 5f;
     }
 
     public class TNBKShipBaseModuleBehaviour : BlockModuleBehaviour<TNBKShipBaseModule>
@@ -52,6 +56,7 @@ namespace TNBKSpace
 
         public BasicInfo basicinfo;
         public Transform CollidersTransform;
+        public Transform BasePointTransform;
 
         public int initwait = 0;
 
@@ -94,6 +99,10 @@ namespace TNBKSpace
                 ReverseToggle = BlockBehaviour.AddToggle(Mod.isJapanese ? "反転" : "Reverse Body", "reverse", false);
                 ReverseToggle.DisplayInMapper = true;
                 ReverseToggle.Toggled += ApplyReverse;
+
+                //接続判定を5fだけ下にずらす
+                BasePointTransform = transform.Find("TriggerForJoint");
+                BasePointTransform.localPosition += new UnityEngine.Vector3(0f, Module.JointOffset, 0f);
             }
             else
             {

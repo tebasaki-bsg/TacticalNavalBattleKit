@@ -227,7 +227,6 @@ namespace TNBKSpace
             }
             catch
             {
-                Mod.Warning("Failed to get texture. Please check PNG file name");
                 HUDTex = ModTexture.GetTexture("DefaultHUD");
             }
 
