@@ -37,6 +37,9 @@ namespace TNBKSpace
         public ushort PlayerID = 0;
         public MPTeam team;
 
+        public Joint joint;
+        public float JointStrength = 80000f;
+
         public override void SafeAwake()
         {
             base.SafeAwake();
@@ -68,6 +71,10 @@ namespace TNBKSpace
                 //コライダーの判定をオフに
                 MyCollider = transform.Find("Colliders/Capsule Collider").GetComponent<CapsuleCollider>();
                 MyCollider.enabled = false;
+
+                joint = GetComponent<Joint>();
+                joint.breakForce = JointStrength;
+                joint.breakTorque = JointStrength;
             }
             
         }

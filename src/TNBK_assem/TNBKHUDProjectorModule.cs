@@ -60,6 +60,9 @@ namespace TNBKSpace
 
         public bool BuildInit = false;
 
+        public Joint joint;
+        public float JointStrength = 80000f;
+
         public override void SafeAwake()
         {
             base.SafeAwake();
@@ -141,6 +144,13 @@ namespace TNBKSpace
             EnableKey = GetKey(Module.EnableKey);
 
             color = new Color(ColorSlider.Value.r, ColorSlider.Value.r, ColorSlider.Value.r, AlphaSlider.Value);
+
+            if(!StatMaster.isMP || StatMaster.isHosting || StatMaster.isLocalSim)
+            {
+                joint = GetComponent<Joint>();
+                joint.breakForce = JointStrength;
+                joint.breakTorque = JointStrength;
+            }
         }
 
         public override void SimulateUpdateAlways()
