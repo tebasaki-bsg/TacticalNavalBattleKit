@@ -40,6 +40,8 @@ namespace TNBKSpace
         public static Image CullentHUDImage;
         public static RectTransform CullentHUDRectTransform;
 
+        public static BlockBehaviour CullentHUDBlock;
+
         public MSlider ScaleSlider;
         public MSlider AlphaSlider;
         public MColourSlider ColorSlider;
@@ -224,22 +226,11 @@ namespace TNBKSpace
         //表示中の画像を変える関数
         public void ChangeTexture(Texture2D tex)
         {
-            //HUDの画像が同じ場合：オンオフを変える
-            if(CullentHUDTex == tex)
+            //HUDを使用中のブロックが自身でない場合（画像で判断すると同じ画像で違うブロックの場合にオフにしてしまう）
+            if(CullentHUDBlock == null || CullentHUDBlock != BlockBehaviour)
             {
-                //デフォ画像を使用する場合も大きさ・色は変わっていないため先に変える
+                CullentHUDBlock = BlockBehaviour;
 
-                //大きさの適用
-                CullentHUDRectTransform.sizeDelta = new Vector2(CullentHUDTex.width * ScaleSlider.Value, CullentHUDTex.height * ScaleSlider.Value);
-
-                //色を変える
-                CullentHUDImage.color = color;
-
-                CullentHUDObject.SetActive(!CullentHUDObject.activeInHierarchy);
-            }
-            //違う場合：画像を変え、オンにする
-            else
-            {
                 //新しくスプライトを作る
                 CullentHUDSprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
                 CullentHUDImage.sprite = CullentHUDSprite;
@@ -254,6 +245,19 @@ namespace TNBKSpace
                 CullentHUDRectTransform.sizeDelta = new Vector2(CullentHUDTex.width * ScaleSlider.Value, CullentHUDTex.height * ScaleSlider.Value);
 
                 CullentHUDObject.SetActive(true);
+            }
+            //HUDを使用中のブロックが自身の場合
+            else
+            {
+                //デフォ画像を使用する場合も大きさ・色は変わっていないため先に変える
+
+                //大きさの適用
+                CullentHUDRectTransform.sizeDelta = new Vector2(CullentHUDTex.width * ScaleSlider.Value, CullentHUDTex.height * ScaleSlider.Value);
+
+                //色を変える
+                CullentHUDImage.color = color;
+
+                CullentHUDObject.SetActive(!CullentHUDObject.activeInHierarchy);
             }
         }
 
