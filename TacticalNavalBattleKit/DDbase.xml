@@ -26,7 +26,7 @@
 	<Name>DD base</Name>
 	
 	<!-- TODO: Change the mass to something appropriate -->
-	<Mass>8.0</Mass>
+	<Mass>16.0</Mass>
 	
 	<!-- Additional keywords that can be used to search for this block
 		 in the search tab of the block bar.

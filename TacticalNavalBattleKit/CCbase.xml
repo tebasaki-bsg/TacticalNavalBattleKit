@@ -26,7 +26,7 @@
 	<Name>CC base</Name>
 	
 	<!-- TODO: Change the mass to something appropriate -->
-	<Mass>12.0</Mass>
+	<Mass>24.0</Mass>
 	
 	<!-- Additional keywords that can be used to search for this block
 		 in the search tab of the block bar.
