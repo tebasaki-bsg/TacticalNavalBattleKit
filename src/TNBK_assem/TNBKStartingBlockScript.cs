@@ -36,28 +36,28 @@ namespace TNBKSpace
 
         public void Start()
         {
-            TNBKMapRenderer.MapVisible = false;
-
-            TNBKMapRenderer.MapScale = ScaleSlider.Value;   //デフォで960x960
-            TNBKMapRenderer.MapPosition = new UnityEngine.Vector2(OffsetSliderX.Value, OffsetSliderY.Value);
-
+            //建築中でない場合のみ作動
             if (!blockBehaviour.isBuildBlock)
             {
+                //オーナーチェック
                 UpdateOwnerFlag();
+
+                //オーナーであればミニマップを調整
+                if(isOwnerSame)
+                {
+                    TNBKMapRenderer.MapScale = ScaleSlider.Value;   //デフォで960x960
+                    TNBKMapRenderer.MapPosition = new UnityEngine.Vector2(OffsetSliderX.Value, OffsetSliderY.Value);
+                }
             }
         }
 
-        public void Update()
+        public void OnDisable()
         {
-            //建築中は無視
-            if(StatMaster.PlayMode == BesiegePlayMode.BuildMode)
+            //消された＆観戦中⇒リスポと判断
+            if (StatMaster.levelSimulating)
             {
-                return;
-            }
+                Mod.SomeoneRespawn = true;
 
-            //その画面のプレイヤーじゃなければ無視
-            if(!isOwnerSame)
-            {
                 return;
             }
         }

@@ -31,8 +31,12 @@ namespace TNBKSpace
 		public static bool CannonScriptAttached = false;
 
 		public static List<Block> ShipBaseList = new List<Block>();
-
+		
+		//達成度
 		public static DestructionBar destructionBar;    //ShipBaseが建築中SafeAwakeにて取得
+
+		//誰かがその瞬間リスポしたか、コアブロが判断
+		public static bool SomeoneRespawn = false;
 
 		//フォルダ名とパス
 		public static string FolderName

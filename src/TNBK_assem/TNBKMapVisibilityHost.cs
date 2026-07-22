@@ -70,15 +70,17 @@ namespace TNBKSpace
             if (wasSimulating && !sim)
             {
                 TNBKMapSession.OnSessionEnd();
+
+                Mod.CannonScriptAttached = false;
+
+                TNBKMapRenderer.MapVisible = false;
             }
 
             //シミュがスタートした瞬間
-            /*
             if(!wasSimulating && sim)
             {
-                
+
             }
-            */
 
             wasSimulating = sim;
 

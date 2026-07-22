@@ -73,8 +73,6 @@ namespace TNBKSpace
         {
             base.SafeAwake();
 
-            
-
             if (BlockBehaviour.isBuildBlock)
             {
                 //艦種を取得
@@ -214,12 +212,21 @@ namespace TNBKSpace
         {
             base.OnSimulateStop();
 
-            TNBKMapSession.OnSessionEnd();
-            Mod.CannonScriptAttached = false;
+            //カメラ用のShipBaseListを消す
             Mod.ShipBaseList.Clear();
 
-            TNBKMapRenderer.MapVisible = false;
+            //リスポ中でない場合
+            if(!StatMaster.levelSimulating)
+            {
+                //ミニマップをオフに
+                TNBKMapRenderer.MapVisible = false;
 
+                //シミュ終了時の処理
+                TNBKMapSession.OnSessionEnd();
+
+                //（一応）大砲スクリプトが張り付いてないことにする。マルチ→バレン→マルチなどの場合に付ける必要があるため。
+                Mod.CannonScriptAttached = false;
+            }
         }
 
         //反転を適用させる関数

@@ -51,7 +51,12 @@ namespace TNBKSpace
                                     TNBKShipBaseModuleBehaviour module, MPTeam team)
         {
             // 再送(ResendAllTo等)による二重登録を正常系として吸収
-            if (byId.ContainsKey(sessionId)) return;
+            if (byId.ContainsKey(sessionId))
+            {
+                Mod.Log("Already registerd");
+                return;
+            }
+            
 
             var e = new TNBKShipEntry
             {
