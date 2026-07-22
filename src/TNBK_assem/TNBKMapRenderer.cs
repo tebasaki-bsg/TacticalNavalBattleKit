@@ -25,12 +25,12 @@ namespace TNBKSpace
         public static Vector2 MapPosition = new Vector2(-700f, 300f);
 
         // ---- マップ定義 ----
-        private const float WorldSizeMeters = 3840f;   // ワールドの一辺
-        private const float MapTexSize = 960f;         // 背景テクスチャの一辺(px)
+        public static float WorldSizeMeters = 3840f;   // ワールドの一辺
+        public static float MapTexSize = 960f;         // 背景テクスチャの一辺(px)
 
         // 毎フレームの除算を避けるための逆数(定数なのでコンパイル時に確定)
         // WorldToMap / MapToWorld の正規化で「/ WorldSizeMeters」の代わりに使う
-        private const float InvWorldSize = 1f / WorldSizeMeters;
+        public static float InvWorldSize = 1f / WorldSizeMeters;
 
         /// <summary>
         /// マップ背景の中心に対応するワールドXZ座標
@@ -38,10 +38,12 @@ namespace TNBKSpace
         public static Vector2 WorldCenter = Vector2.zero;
 
         /// <summary>測距用: 1mあたりのpx(スケール込み)。
-        /// 方向アイコンの目盛りはスケール1のとき0.25px/mで焼き込まれている前提</summary>
+        /// 方向アイコンの目盛りはスケール1のとき0.25px/mで焼き込まれている前提
+        /// アイコンを書き込むので固定値に
+        /// </summary>
         public static float PixelsPerMeter
         {
-            get { return (MapTexSize / WorldSizeMeters) * MapScale; }
+            get { return 0.25f * MapScale; }
         }
 
         // ---- チーム色(★3 仮の5色。アイコンは白ベース+乗算着色を想定) ----
@@ -86,10 +88,12 @@ namespace TNBKSpace
             
         }
 
-        //テクスチャをロードする関数
+        //テクスチャをロードする関数（毎フレーム呼ばれる）
         private void EnsureTextures()
         {
+            //2回目以降は無視
             if (texturesLoaded) return;
+
             texBackground = ModTexture.GetTexture("Map-Background");
             texDD = ModTexture.GetTexture("Map-DD");
             texCC = ModTexture.GetTexture("Map-CC");
@@ -104,8 +108,7 @@ namespace TNBKSpace
 
         /// <summary>
         /// カーソル位置にピンを刺す。このクラスのUpdate()がPキー押下時に呼ぶ。
-        /// マップ表示中・シミュ中・非観戦・カーソルがマップ内の全条件を
-        /// 満たさなければ何もしない。
+        /// マップ表示中・シミュ中・非観戦・カーソルがマップ内の全条件を満たさなければ何もしない。
         /// </summary>
         private static void TryPlacePinAtCursor()
         {
@@ -140,6 +143,7 @@ namespace TNBKSpace
             }
         }
 
+        //GUIの更新（毎フレーム数回）
         public void OnGUI()
         {
             if (!MapVisible) return;
@@ -147,18 +151,30 @@ namespace TNBKSpace
 
             EnsureTextures();
 
-            // ---- マップ矩形(デフォルト: 画面中央、等倍) ----
+            //全体で使用するRectを作成
             float size = MapTexSize * MapScale;
             Rect mapRect = new Rect(
-                (Screen.width - size) * 0.5f + MapPosition.x,
-                (Screen.height - size) * 0.5f + MapPosition.y,
-                size, size);
+                (Screen.width - size) * 0.5f + MapPosition.x,  //左上原点X：(スクリーン - 画像サイズ×スケール）×0.5 + オフセットX
+                (Screen.height - size) * 0.5f + MapPosition.y, //左上原点Y：(スクリーン - 画像サイズ×スケール）×0.5 + オフセットY
+                size,      //マップサイズX：画像サイズ×スケール
+                size);     //マップサイズY：画像サイズ×スケール
 
-            GUI.DrawTexture(mapRect, texBackground);
+            //背景用のRectを作成
+            float sizeX = texBackground.width * MapScale;
+            float sizeY = texBackground.height * MapScale;
+            Rect mapBackgroundRect = new Rect(
+                (Screen.width - sizeX) * 0.5f + MapPosition.x,  //左上原点X：(スクリーン - 画像サイズ×スケール）×0.5 + オフセットX
+                (Screen.height - sizeY) * 0.5f + MapPosition.y, //左上原点Y：(スクリーン - 画像サイズ×スケール）×0.5 + オフセットY
+                sizeX,      //マップサイズX：画像サイズ×スケール
+                sizeY);     //マップサイズY：画像サイズ×スケール
+
+            //背景を描画
+            GUI.DrawTexture(mapBackgroundRect, texBackground);
 
             // ---- 表示判定の材料 ----
-            bool spectator = StatMaster.PlayMode == BesiegePlayMode.Spectator;
-            MPTeam myTeam = MPTeam.None;
+            bool spectator = StatMaster.PlayMode == BesiegePlayMode.Spectator;  //観戦中か
+            MPTeam myTeam = MPTeam.None;    //自チーム
+
             if (!spectator)
             {
                 Player local = Player.GetLocalPlayer();
