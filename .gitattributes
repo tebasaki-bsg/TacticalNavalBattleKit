@@ -1,3 +1,5 @@
 # Besiege Mod .gitattributes
 
 *.obj binary
+effects/** binary
+effectsMac/** binary

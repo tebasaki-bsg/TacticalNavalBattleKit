@@ -160,6 +160,9 @@ Add some utilities for naval battle.  <!-- FIX: Insert a short description here.
 		<Texture name="DefaultHUD" path="png/UI/DefaultHUD.png" />
 		
 		<Texture name="icon" path="png/icon.png" />
+
+		<AssetBundle name="TNBK" path="effects/tnbk" />
+		<AssetBundle name="TNBKmac" path="effects/tnbkmac" />
 	</Resources>
 
 

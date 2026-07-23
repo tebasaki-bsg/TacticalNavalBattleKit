@@ -23,6 +23,9 @@ namespace TNBKSpace
 		public static GameObject MapObject;
 		public static GameObject ShipIconPrefab;
 
+		//アセットバンドル
+		public static ModAssetBundle modAssetBundle;
+
 		// メッセージ型(全マシンでOnLoad時に同一順序で生成される)
 		public static MessageType MessageShipIdAssignType;
 		public static MessageType MessageVisibilityType;
@@ -30,8 +33,9 @@ namespace TNBKSpace
 		// 大砲の弾にスクリプトを付けているか、OnSimulateStop()にてfalse
 		public static bool CannonScriptAttached = false;
 
+		//カメラ用に使用するShipBaseのリスト
 		public static List<Block> ShipBaseList = new List<Block>();
-		
+
 		//達成度
 		public static DestructionBar destructionBar;    //ShipBaseが建築中SafeAwakeにて取得
 
@@ -85,7 +89,22 @@ namespace TNBKSpace
 			val.gameObject.layer = LayerMask.NameToLayer("HUD");
 			TNBKMod.AddComponent<CanvasScaler>().scaleFactor = 1f;   //画面サイズに応じてUIをスケーリングするためのコンポーネントをアタッチする
 
-
+			//AssetBundleの読み込み
+			switch (Application.platform)   //OS毎に変更
+			{
+				case RuntimePlatform.WindowsPlayer:
+					modAssetBundle = ModResource.GetAssetBundle("TNBK");
+					break;
+				case RuntimePlatform.OSXPlayer:
+					modAssetBundle = ModResource.GetAssetBundle("TNBKmac");
+					break;
+				case RuntimePlatform.LinuxPlayer:
+					modAssetBundle = ModResource.GetAssetBundle("TNBKmac");
+					break;
+				default:
+					modAssetBundle = ModResource.GetAssetBundle("TNBK");
+					break;
+			}
 
 			//各ModuleとBehaviourをセットにし、XML上で使えるようにする。XMLからの読み込みとスクリプトの貼り付けはBesiege本体が行ってくれる。
 			Modding.Modules.CustomModules.AddBlockModule<TNBKShipBaseModule, TNBKShipBaseModuleBehaviour>("TNBKShipBaseModule", true);
@@ -143,7 +162,7 @@ HUDProjectorオプション：
 				VisibilityType = ModNetworking.CreateMessageType(DataType.IntegerArray);
 				ModNetworking.Callbacks[VisibilityType] += new Action<Message>(OnVisibilityReceived);
 
-				ProgressType = ModNetworking.CreateMessageType(DataType.Integer, DataType.Integer);	//MPTeam(int), 達成度(int)
+				ProgressType = ModNetworking.CreateMessageType(DataType.Integer, DataType.Integer, DataType.Integer);	//MPTeam(int), 達成度(int), sessionID
 				ModNetworking.Callbacks[ProgressType] += new Action<Message>(OnProgressReceived);
 
 				// ピン: プレイヤーが刺した座標(x, z)をホストへ
@@ -235,7 +254,11 @@ HUDProjectorオプション：
 			{
 				MPTeam team = (MPTeam)message.GetData(0);
 				destructionBar.AddProgress(team, -1f * (int)message.GetData(1));
-				
+
+				//撃破されたShipBaseに撃破エフェクトを再生させる
+				TNBKShipEntry ShipBaseEntry;
+				TNBKShipRegistry.TryGet((ushort)message.GetData(2), out ShipBaseEntry);
+				ShipBaseEntry.Module.PlayDestroyedEffect();
 			}
 		}
 	}

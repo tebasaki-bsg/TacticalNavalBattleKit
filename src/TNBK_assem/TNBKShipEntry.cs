@@ -76,6 +76,7 @@ namespace TNBKSpace
             list.Add(e);
         }
 
+        //IDからTNBKShipEntryを取得する関数
         public static bool TryGet(ushort sessionId, out TNBKShipEntry entry)
         {
             return byId.TryGetValue(sessionId, out entry);

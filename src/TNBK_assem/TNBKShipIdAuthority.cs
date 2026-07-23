@@ -17,21 +17,22 @@ namespace TNBKSpace
     {
         private static ushort nextId;
 
+        //二重登録防止のためのDictionary
         private static readonly Dictionary<BlockBehaviour, ushort> assigned
             = new Dictionary<BlockBehaviour, ushort>();
 
         /// <summary>
         /// IDを発行し、艦船の登録をShipRegisterに行わせる関数。
         /// TNBKShipBaseModuleBehaviour.OnSimulateStart から呼ぶ。
-        /// 呼び出し側でガードすること:
-        ///   if (StatMaster.isHosting) TNBKShipIdAuthority.RegisterShip(this);
+        /// 戻り値で自身のsessionIDを取得させる
         /// </summary>
-        public static void RegisterShip(TNBKShipBaseModuleBehaviour module)
+        public static ushort RegisterShip(TNBKShipBaseModuleBehaviour module)
         {
             BlockBehaviour bb = module.BlockBehaviour;
-            if (bb == null) return;
-            if (assigned.ContainsKey(bb)) return;   // 二重発番防止
+            if (bb == null) return 0;   //nullの時はどうでもいいので0を返す
+            if (assigned.ContainsKey(bb)) return assigned[bb];   // 二重発番防止、番号を書き換えないように元の番号を返す
 
+            //sessionIDを生成し、このクラスの持つ二重登録防止用Dictionaryに登録
             ushort id = nextId++;
             assigned.Add(bb, id);
 
@@ -43,6 +44,8 @@ namespace TNBKSpace
             Message msg = Mod.TNBKMapNetwork.ShipIdAssignType
                 .CreateMessage(Block.From(bb), (int)id);
             ModNetworking.SendToAll(msg);
+
+            return id;
         }
 
         /// <summary>途中参加者への対応表の再送(Event.OnPlayerJoinから)</summary>

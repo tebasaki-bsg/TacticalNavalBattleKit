@@ -28,8 +28,6 @@ namespace TNBKSpace
 
     }
 
-
-
     //大砲の弾に追加するスクリプト
     public class TNBKCannonProjectileScript : MonoBehaviour
     {
@@ -40,7 +38,6 @@ namespace TNBKSpace
         public Rigidbody rigidbody;
 
         public UnityEngine.Vector3 prevPos;
-        
 
         public void Awake()
         {
@@ -61,12 +58,21 @@ namespace TNBKSpace
 
             colliders = Physics.OverlapSphere(prevPos, 5f * transform.localScale.x, layerMask);
 
+            if(colliders.Length == 0)
+            {
+                return;
+            }
+
             foreach(Collider col in colliders)
             {
-                blockBehaviour = col.gameObject.transform.parent.transform.parent.GetComponent<CanonBlock>();
-                blockBehaviour.BlockHealth.DamageBlock(1.6f * transform.localScale.x);
-                blockBehaviour.BlockHealth.health --;
+                blockBehaviour = col.gameObject.transform.parent.transform.parent.GetComponent<BlockBehaviour>();
 
+                if(blockBehaviour == null)
+                {
+                    return;
+                }
+
+                blockBehaviour.BlockHealth.DamageBlock(1.6f * transform.localScale.x);
             }
         }
 

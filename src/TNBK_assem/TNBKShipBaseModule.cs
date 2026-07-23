@@ -63,9 +63,11 @@ namespace TNBKSpace
         public Rigidbody rigidbody;
 
         public Joint joint;
-        public float JointStrength = 2400000f;
+        public float JointStrength = 6000000f;
 
         public ShipClass ShipClass = 0;
+
+        public ushort sessionID = 0;
 
         public ushort PlayerID = 0;
 
@@ -73,6 +75,10 @@ namespace TNBKSpace
 
         public BlockBehaviour blockBehaviour;
         public DestructionBar destructionBar;
+
+        public GameObject EffectPrefab;
+        public GameObject EffectObject;
+        public ParticleSystem particleSystem;
 
         public override void SafeAwake()
         {
@@ -103,6 +109,15 @@ namespace TNBKSpace
                 //接続判定を5fだけ下にずらす
                 BasePointTransform = transform.Find("TriggerForJoint");
                 BasePointTransform.localPosition += new UnityEngine.Vector3(0f, Module.JointOffset, 0f);
+
+                //撃破時エフェクトオブジェクト、エフェクトの初期化
+                EffectPrefab = Mod.modAssetBundle.LoadAsset<GameObject>("DestroyExplode");
+                EffectObject = (GameObject)Instantiate(EffectPrefab, transform);
+                EffectObject.SetActive(false);
+                particleSystem = EffectObject.GetComponent<ParticleSystem>();
+
+                particleSystem.Stop();
+                EffectObject.transform.position = BlockBehaviour.GetCenter();
             }
             else
             {
@@ -115,7 +130,7 @@ namespace TNBKSpace
                 //ホストならこの艦を登録
                 if (StatMaster.isHosting)
                 {
-                    TNBKShipIdAuthority.RegisterShip(this);
+                    sessionID = TNBKShipIdAuthority.RegisterShip(this);
                 }
 
                 //カメラ用にShipBaseのListを作っておく
@@ -188,10 +203,12 @@ namespace TNBKSpace
                 destructionBar.AddProgress(BlockBehaviour.Team, -1f * Progress);
 
                 //クライアントに達成度を減らす命令を送る
-                Message msg = Mod.TNBKMapNetwork.ProgressType.CreateMessage((int)BlockBehaviour.Team, Progress);
+                Message msg = Mod.TNBKMapNetwork.ProgressType.CreateMessage((int)BlockBehaviour.Team, Progress, (int)sessionID);
                 ModNetworking.SendToAll(msg);
 
                 isDestroyed = true;
+
+                PlayDestroyedEffect();
             }
 
             if (initwait < 10)
@@ -288,6 +305,13 @@ namespace TNBKSpace
 
 
             }
+        }
+
+        //撃破時にエフェクトを再生する関数、ホスト以外は達成度変更メッセージ受信時に呼ばれる
+        public void PlayDestroyedEffect()
+        {
+            EffectObject.SetActive(true);
+            particleSystem.Play();
         }
     }
 }
