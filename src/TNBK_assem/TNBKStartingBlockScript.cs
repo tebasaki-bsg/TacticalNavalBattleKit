@@ -24,7 +24,7 @@ namespace TNBKSpace
             blockBehaviour = GetComponent<BlockBehaviour>();
 
             //ScaleとOffsetのスライダーを追加
-            ScaleSlider = blockBehaviour.AddSlider("Scale X", "map-scale", 0.4f, 0.01f, 5f);
+            ScaleSlider = blockBehaviour.AddSlider("Map Scale", "map-scale", 0.4f, 0.01f, 5f);
             ScaleSlider.DisplayInMapper = true;
 
             OffsetSliderX = blockBehaviour.AddSlider("Offset X", "map-offset-x", -700f, -1000f, 1000f);
