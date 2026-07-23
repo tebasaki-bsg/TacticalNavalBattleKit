@@ -58,7 +58,7 @@ namespace TNBKSpace
         };
 
         // ---- テクスチャ(初回描画時に遅延ロード) ----
-        private Texture2D texBackground, texDD, texCC, texBB, texCV, texEX, texDirection, texPin;
+        private Texture2D texBackground, texDD, texCC, texBB, texCV, texEX, texDirection, texPin, texHill;
         private bool texturesLoaded;
 
         // 現在のマップ矩形(OnGUIで毎回更新)。ピン逆変換にも使うためstatic
@@ -102,6 +102,7 @@ namespace TNBKSpace
             texEX = ModTexture.GetTexture("Map-EX");    //航空機等
             texDirection = ModTexture.GetTexture("Map-Direction");
             texPin = ModTexture.GetTexture("Map-Pin");
+            texHill = ModTexture.GetTexture("Map-Hill");
 
             texturesLoaded = true;
         }
@@ -144,6 +145,9 @@ namespace TNBKSpace
         }
 
         //GUIの更新（毎フレーム数回）
+        /// <summary>
+        /// 背景→島オブジェクト→ピン→艦アイコン→カメラ測距儀の順に描画
+        /// </summary>
         public void OnGUI()
         {
             if (!MapVisible) return;
@@ -170,6 +174,8 @@ namespace TNBKSpace
 
             //背景を描画
             GUI.DrawTexture(mapBackgroundRect, texBackground);
+
+            DrawLargeHills(mapRect);
 
             // ---- 表示判定の材料 ----
             bool spectator = StatMaster.PlayMode == BesiegePlayMode.Spectator;  //観戦中か
@@ -237,9 +243,11 @@ namespace TNBKSpace
             float h = icon.height * MapScale;
             Rect r = new Rect(pos.x - w * 0.5f, pos.y - h * 0.5f, w, h);
 
+            //元の回転と色を保存
             Matrix4x4 savedMatrix = GUI.matrix;
             Color savedColor = GUI.color;
 
+            //回転させる
             GUIUtility.RotateAroundPivot(yaw, pos);
             Color teamColor;
 
@@ -290,6 +298,47 @@ namespace TNBKSpace
                 // 角度追従なし=中心を座標に合わせる素直な配置とする
                 Rect r = new Rect(pos.x - w * 0.5f, pos.y - h * 0.5f, w, h);
                 GUI.DrawTexture(r, texPin);
+            }
+        }
+
+        //島オブジェクトを描画
+        private void DrawLargeHills(Rect mapRect)
+        {
+            Vector2 pos;
+            Rect r;
+            float w;
+            float h;
+            float yaw;
+
+            //元の回転と色を保存
+            Matrix4x4 savedMatrix;
+
+            //LargeHillを描画
+            foreach (Transform child in TNBKLargeHillScript.LargeHillsList)
+            {
+                //元の回転を保存
+                savedMatrix = GUI.matrix;
+
+                //座標を画像用の座標に変換
+                pos = WorldToMap(mapRect, child.position);
+
+                //テクスチャの幅,高さを設定（テクスチャ幅 × 0.033（30倍スケール） × 島のXスケール × ミニマップのスケール）
+                w = texHill.width * 0.033f * child.localScale.x * MapScale;
+                h = texHill.width * 0.033f * child.localScale.z * MapScale;
+
+                //Rectを作成
+                r = new Rect(pos.x - w * 0.5f, pos.y - h * 0.5f, w, h);
+
+                //回転を取得
+                yaw = child.eulerAngles.y;
+
+                //描画位置を回転させる
+                GUIUtility.RotateAroundPivot(yaw, pos);
+
+                GUI.DrawTexture(r, texHill);
+
+                //描画位置の回転を戻す
+                GUI.matrix = savedMatrix;
             }
         }
 

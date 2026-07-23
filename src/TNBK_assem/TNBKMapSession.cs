@@ -14,8 +14,6 @@ namespace TNBKSpace
         /// </summary>
         public static void OnSessionEnd()
         {
-            Mod.Log("SessionEnd called");
-
             TNBKShipRegistry.Clear();
             TNBKShipIdAuthority.Clear();        // ホスト以外で呼んでも無害
             TNBKMapVisibilityClient.Clear();

@@ -31,6 +31,9 @@ namespace TNBKSpace
         // 使い回しバッファ(毎周期のGCアロケーション回避)
         private readonly List<ushort> sendBuffer = new List<ushort>();
 
+        // MULTIPLAYER LEVEL/STATIC、この中に大きな丘がある
+        public static Transform STATICtransform;
+
         public void Awake()
         {
             Instance = this;
@@ -79,7 +82,25 @@ namespace TNBKSpace
             //シミュがスタートした瞬間
             if(!wasSimulating && sim)
             {
-
+                //STATICの子をすべて取得し、LargeHillならスクリプトを貼り付ける
+                foreach(Transform child in STATICtransform)
+                {
+                    // 名前が大きな丘かつアクティブ
+                    if(child.gameObject.name == "LargeHill" && child.gameObject.activeInHierarchy)
+                    {
+                        //既にスクリプトがあるなら、関数を実行
+                        if(child.gameObject.GetComponent<TNBKLargeHillScript>() != null)
+                        {
+                            child.gameObject.GetComponent<TNBKLargeHillScript>().RegisterToList();
+                        }
+                        else
+                        {
+                            //スクリプトを貼り付け、リストに登録させる
+                            child.gameObject.AddComponent<TNBKLargeHillScript>().RegisterToList();
+                        }
+                        
+                    }
+                }
             }
 
             wasSimulating = sim;
@@ -251,5 +272,6 @@ namespace TNBKSpace
             }
             return map;
         }
+
     }
 }

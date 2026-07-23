@@ -10,6 +10,7 @@ using Modding.Serialization;
 using Modding.Modules;
 using Modding.Blocks;
 using Modding.Common;
+using Modding.Levels;
 using UnityEngine.SceneManagement;
 using Localisation;
 
@@ -114,6 +115,9 @@ namespace TNBKSpace
 
 			//BlockSelectorを追加
 			SingleInstance<BlockSelector>.Instance.transform.parent = TNBKMod.transform;
+
+			//EntitySelectorを追加
+			SingleInstance<EntitySelector>.Instance.transform.parent = TNBKMod.transform;
 
 			//通信関係を初期化
 			TNBKMapNetwork.Setup();
@@ -333,5 +337,68 @@ HUDProjectorオプション：
 
 	}
 
-	
+	public class EntitySelector : SingleInstance<EntitySelector>
+	{
+		// ブロックのIDと、追加したいスクリプトを紐づけた辞書
+		public Dictionary<string, Type> EntityDict = new Dictionary<string, Type>
+		{
+			//大きな丘
+			{"LargeHill", typeof(TNBKLargeHillScript) }
+
+		};
+
+		// プロパティ
+		// Guiと同様の呪文
+		public override string Name
+		{
+			get
+			{
+				return "TNBKEntitySelector";
+			}
+		}
+
+		public void Awake()
+		{
+			// ブロックを設置した場合に呼び出されるアクションに、AddScriptというメソッドを追加する
+			Events.OnEntityPlaced += new Action<Entity>(AddScript);
+			Events.OnLevelLoaded += new Action<Level>(FindStaticAndClearLargeHillsList);
+		}
+
+		// ブロック設置時に、そのブロックに所定のスクリプトを貼り付ける関数
+		public void AddScript(Entity entity)
+		{
+			Mod.Log("Called AddScript Entity. Name is " + entity.InternalObject.gameObject.name);
+
+			// そのブロックがスクリプトを貼り付けるべきブロックであるなら、貼り付ける
+			if (EntityDict.ContainsKey(entity.InternalObject.gameObject.name))
+			{
+				Type type = EntityDict[entity.InternalObject.gameObject.name];
+				try
+				{
+					// まだ所定のスクリプトが貼り付けられていない場合にのみ、貼り付ける
+					if (entity.InternalObject.gameObject.GetComponent(type) == null)
+					{
+						entity.InternalObject.gameObject.AddComponent(type);
+					}
+				}
+				catch
+				{
+					Mod.Error("EntityAddScript Error!");
+				}
+				return;
+			}
+		}
+
+		public void FindStaticAndClearLargeHillsList(Level level)
+        {
+			//大きな丘のあるSTATICのtransformを取得
+			TNBKMapVisibilityHost.STATICtransform = GameObject.Find("MULTIPLAYER LEVEL").transform.Find("STATIC");
+
+			TNBKLargeHillScript.LargeHillsList.Clear();
+        }
+
+
+	}
+
+
 }

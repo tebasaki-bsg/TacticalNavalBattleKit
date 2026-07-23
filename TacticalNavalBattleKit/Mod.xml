@@ -150,6 +150,7 @@ Add some utilities for naval battle.  <!-- FIX: Insert a short description here.
 		<Texture name="Map-EX" path="png/UI/Map-EX.png" />
 		<Texture name="Map-Direction" path="png/UI/Map-Direction.png" />
 		<Texture name="Map-Pin" path="png/UI/Map-Pin.png" />
+		<Texture name="Map-Hill" path="png/UI/Map-Hill.png" />
 
 		<Texture name="TeamRed" path="png/TeamRed.png" />
 		<Texture name="TeamBlue" path="png/TeamBlue.png" />
@@ -162,7 +163,7 @@ Add some utilities for naval battle.  <!-- FIX: Insert a short description here.
 		<Texture name="icon" path="png/icon.png" />
 
 		<AssetBundle name="TNBK" path="effects/tnbk" />
-		<AssetBundle name="TNBKmac" path="effects/tnbkmac" />
+		<AssetBundle name="TNBKmac" path="effectsMac/tnbkmac" />
 	</Resources>
 
 
